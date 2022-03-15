@@ -12,8 +12,6 @@ static void uart_init() {
 	ECLIC_Register_IRQ(USART0_IRQn, ECLIC_NON_VECTOR_INTERRUPT,
 			ECLIC_LEVEL_TRIGGER, 1, 0, NULL);
 
-	__enable_irq();
-
 	// IO for USART0
 	gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
 	gpio_init(GPIOA, GPIO_MODE_IN_FLOATING, GPIO_OSPEED_50MHZ, GPIO_PIN_10);
@@ -78,6 +76,8 @@ void circle_display_loop() {
 int main(int argc, const char **argv) {
 	uart_init();
 	led_init();
+
+	__enable_irq();
 
 	printf("== %s ==\r\n", "the system is ready");
 
