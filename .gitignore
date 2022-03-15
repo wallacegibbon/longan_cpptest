@@ -1,0 +1,17 @@
+nuclei-sdk/
+*.o
+*.d
+*.a
+*.out
+*.dump
+*.dasm
+*.map
+*.elf
+*.hex
+*.bin
+*.verilog
+*.srec
+*.swp
+*~
+tags
+openocd.log
