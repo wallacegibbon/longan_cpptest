@@ -1,9 +1,13 @@
 #include <nuclei_sdk_soc.h>
 #include <stdio.h>
+#include <stdint.h>
 #include "Screen_ST7735.h"
+#include "RingBuffer.h"
 
 Screen_ST7735 longan_screen(SPI0, GPIOB, GPIO_PIN_1, GPIOB, GPIO_PIN_2,
 		GPIOB, GPIO_PIN_0, 160, 80);
+
+RingBuffer<uint8_t, 10> usart0_recv_buffer;
 
 static void uart_init() {
 	rcu_periph_clock_enable(RCU_GPIOA);
@@ -50,7 +54,8 @@ void update_loop_display() {
 	static unsigned short current_color = 0;
 	for (int i = 0; i < 36; i++) {
 		current_color += 10;
-		longan_screen.draw_circle(80, 40, i, (Color16) current_color);
+		longan_screen.draw_circle(80, 40, i,
+				static_cast<Color16>(current_color));
 	}
 }
 
@@ -119,13 +124,20 @@ extern "C" {
 #endif
 
 int _put_char(int ch) {
-	usart_data_transmit(USART0, (uint8_t) ch);
+	usart_data_transmit(USART0, static_cast<uint8_t>(ch));
 	while (usart_flag_get(USART0, USART_FLAG_TBE) == RESET);
 	return ch;
 }
 
 void USART0_IRQHandler() {
-	int key = usart_data_receive(USART0);
+	uint8_t key = static_cast<uint8_t>(usart_data_receive(USART0));
+
+	uint8_t tmp;
+	if (usart0_recv_buffer.rest() == 0)
+		usart0_recv_buffer.get(&tmp, 1);
+
+	usart0_recv_buffer.put(&key, 1);
+
 	if (key == 'g')
 		green_led.toggle();
 	else if (key == 'b')

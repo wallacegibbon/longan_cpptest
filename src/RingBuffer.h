@@ -1,20 +1,55 @@
 #ifndef __RBUFFER_H__
 #define __RBUFFER_H__
 
-template<class T, int size>
+template<class T, int SIZE>
 class RingBuffer {
 public:
-	RingBuffer() : in(0), out(0), bufsize(size) {}
+	RingBuffer() : in(0), out(0) {}
 	int put(T* data, int count);
 	int get(T* data, int count);
-private:
 	int count();
+	int rest();
 
-	T buf[size];
-	int bufsize;
+private:
+	T buf[SIZE];
 	int in;
 	int out;
-
 };
 
+template<class T, int SIZE>
+int RingBuffer<T, SIZE>::count() {
+	if (in >= out) return in - out;
+	else return SIZE + in - out;
+}
+
+template<class T, int SIZE>
+int RingBuffer<T, SIZE>::rest() {
+	return SIZE - 1 - count();
+}
+
+template<class T, int SIZE>
+int RingBuffer<T, SIZE>::put(T* data, int cnt) {
+	if (rest() < cnt) return 0;
+
+	int i = 0;
+	while (i < cnt && in < SIZE) buf[in++] = data[i++];
+
+	if (in == SIZE) in = 0;
+	while (i < cnt) buf[in++] = data[i++];
+	return cnt;
+}
+
+template<class T, int SIZE>
+int RingBuffer<T, SIZE>::get(T* data, int cnt) {
+	if (count() < cnt) return 0;
+
+	int i = 0;
+	while (i < cnt && out < SIZE) data[i++] = buf[out++];
+	if (out == SIZE) out = 0;
+	while (i < cnt) data[i++] = buf[out++];
+
+	return cnt;
+}
+
 #endif
+
