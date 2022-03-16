@@ -13,7 +13,7 @@ static void uart_init()
     rcu_periph_clock_enable(RCU_GPIOA);
     rcu_periph_clock_enable(RCU_USART0);
 
-    ECLIC_Register_IRQ(USART0_IRQn, ECLIC_NON_VECTOR_INTERRUPT, ECLIC_LEVEL_TRIGGER, 1, 0, NULL);
+    ECLIC_Register_IRQ(USART0_IRQn, ECLIC_NON_VECTOR_INTERRUPT, ECLIC_LEVEL_TRIGGER, 1, 0, nullptr);
 
     // IO for USART0
     gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
@@ -137,14 +137,6 @@ extern "C"
         return ch;
     }
 
-#ifdef __cplusplus
-}
-#endif
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
     void USART0_IRQHandler()
     {
         uint8_t key = static_cast<uint8_t>(usart_data_receive(USART0));

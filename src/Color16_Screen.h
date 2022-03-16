@@ -54,8 +54,6 @@ public:
     void draw_circle(int x, int y, int r, Color16 color);
 
 private:
-    void write_bus(uint8_t data);
-
     int width;
     int height;
 };

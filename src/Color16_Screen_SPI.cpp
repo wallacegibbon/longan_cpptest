@@ -18,16 +18,16 @@ void Color16_Screen_SPI::write_bus(uint8_t data)
     spi_cs_set();
 }
 
-void Color16_Screen_SPI::write_data8(uint8_t data)
-{
-    spi_dc_set();
-    write_bus(data);
-}
-
 void Color16_Screen_SPI::write_data(uint16_t data)
 {
     spi_dc_set();
     write_bus(data >> 8);
+    write_bus(data);
+}
+
+void Color16_Screen_SPI::write_data8(uint8_t data)
+{
+    spi_dc_set();
     write_bus(data);
 }
 
