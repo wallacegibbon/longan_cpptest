@@ -5,65 +5,89 @@ template <class T, int SIZE>
 class RingBuffer
 {
 public:
-    RingBuffer() : in(0), out(0) {}
-    int put(T *data, int count);
-    int get(T *data, int count);
-    int count();
-    int rest();
+	RingBuffer() : in(0), out(0) {}
+	int put(T *data, int count);
+	int get(T *data, int count);
+	int count();
+	int rest();
 
 private:
-    T buf[SIZE];
-    int in;
-    int out;
+	T buf[SIZE];
+	int in;
+	int out;
 };
 
 template <class T, int SIZE>
 int RingBuffer<T, SIZE>::count()
 {
-    if (in >= out)
-        return in - out;
-    else
-        return SIZE + in - out;
+	if (in >= out)
+	{
+		return in - out;
+	}
+	else
+	{
+		return SIZE + in - out;
+	}
 }
 
 template <class T, int SIZE>
 int RingBuffer<T, SIZE>::rest()
 {
-    return SIZE - 1 - count();
+	return SIZE - 1 - count();
 }
 
 template <class T, int SIZE>
 int RingBuffer<T, SIZE>::put(T *data, int cnt)
 {
-    if (rest() < cnt)
-        return 0;
+	if (rest() < cnt)
+	{
+		return 0;
+	}
 
-    int i = 0;
-    while (i < cnt && in < SIZE)
-        buf[in++] = data[i++];
-    if (in == SIZE)
-        in = 0;
-    while (i < cnt)
-        buf[in++] = data[i++];
+	int i = 0;
+	while (i < cnt && in < SIZE)
+	{
+		buf[in++] = data[i++];
+	}
 
-    return cnt;
+	if (in == SIZE)
+	{
+		in = 0;
+	}
+
+	while (i < cnt)
+	{
+		buf[in++] = data[i++];
+	}
+
+	return cnt;
 }
 
 template <class T, int SIZE>
 int RingBuffer<T, SIZE>::get(T *data, int cnt)
 {
-    if (count() < cnt)
-        return 0;
+	if (count() < cnt)
+	{
+		return 0;
+	}
 
-    int i = 0;
-    while (i < cnt && out < SIZE)
-        data[i++] = buf[out++];
-    if (out == SIZE)
-        out = 0;
-    while (i < cnt)
-        data[i++] = buf[out++];
+	int i = 0;
+	while (i < cnt && out < SIZE)
+	{
+		data[i++] = buf[out++];
+	}
 
-    return cnt;
+	if (out == SIZE)
+	{
+		out = 0;
+	}
+
+	while (i < cnt)
+	{
+		data[i++] = buf[out++];
+	}
+
+	return cnt;
 }
 
 #endif
