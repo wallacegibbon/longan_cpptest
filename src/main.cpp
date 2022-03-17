@@ -115,9 +115,13 @@ void LED_Controller::toggle()
 {
   state = !state;
   if (state)
+  {
     gpio_bit_reset(port, pin);
+  }
   else
+  {
     gpio_bit_set(port, pin);
+  }
 }
 
 LED_Controller green_led(GPIOA, GPIO_PIN_1);
@@ -142,14 +146,22 @@ extern "C"
 
     uint8_t tmp;
     if (usart0_recv_buffer.rest() == 0)
+    {
       usart0_recv_buffer.get(&tmp, 1);
-
+    }
     usart0_recv_buffer.put(&data, 1);
 
-    if (data == 'g')
+    switch (data)
+    {
+    case 'g':
       green_led.toggle();
-    else if (data == 'b')
+      break;
+    case 'b':
       blue_led.toggle();
+      break;
+    default:
+      break;
+    }
   }
 
 #ifdef __cplusplus
