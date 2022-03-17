@@ -139,17 +139,17 @@ extern "C"
 
     void USART0_IRQHandler()
     {
-        uint8_t key = static_cast<uint8_t>(usart_data_receive(USART0));
+        uint8_t data = static_cast<uint8_t>(usart_data_receive(USART0));
 
         uint8_t tmp;
         if (usart0_recv_buffer.rest() == 0)
             usart0_recv_buffer.get(&tmp, 1);
 
-        usart0_recv_buffer.put(&key, 1);
+        usart0_recv_buffer.put(&data, 1);
 
-        if (key == 'g')
+        if (data == 'g')
             green_led.toggle();
-        else if (key == 'b')
+        else if (data == 'b')
             blue_led.toggle();
     }
 

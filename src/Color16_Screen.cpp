@@ -30,7 +30,7 @@ class LinePainter
 {
 public:
     LinePainter(Color16_Screen &target_screen, int x1, int y1, int x2, int y2, Color16 color1)
-        : screen(target_screen), x(x1), y(y1), xerr(0), yerr(0), deltax(x2 - x1), deltay(y2 - y1), color(color1)
+        : screen(target_screen), x(x1), y(y1), xerr(0), yerr(0), delta_x(x2 - x1), delta_y(y2 - y1), color(color1)
     {
         prepare();
     }
@@ -42,8 +42,8 @@ private:
     void prepare();
 
     Color16_Screen &screen;
-    int deltax;
-    int deltay;
+    int delta_x;
+    int delta_y;
     int distance;
     int incx;
     int incy;
@@ -56,37 +56,37 @@ private:
 
 void LinePainter::prepare()
 {
-    if (deltax < 0)
+    if (delta_x < 0)
     {
         incx = -1;
-        deltax = -deltax;
+        delta_x = -delta_x;
     }
     else
     {
         incx = 1;
     }
-    if (deltay < 0)
+    if (delta_y < 0)
     {
         incy = -1;
-        deltay = -deltay;
+        delta_y = -delta_y;
     }
     else
     {
         incy = 1;
     }
-    distance = max(deltax, deltay);
+    distance = max(delta_x, delta_y);
 }
 
 void LinePainter::draw_step()
 {
     screen.draw_point(x, y, color);
-    xerr += deltax;
+    xerr += delta_x;
     if (xerr >= distance)
     {
         xerr -= distance;
         x += incx;
     }
-    yerr += deltay;
+    yerr += delta_y;
     if (yerr >= distance)
     {
         yerr -= distance;
@@ -126,13 +126,14 @@ void Color16_Screen::draw_point_x(int x, int y, int a, int b, Color16 color)
 
 void Color16_Screen::draw_circle(int x, int y, int r, Color16 color)
 {
-    int a = 0, b = r;
-    while (a <= b)
+    int px = r;
+    int py = 0;
+    while (py <= px)
     {
-        draw_point_x(x, y, a, b, color);
-        draw_point_x(x, y, b, a, color);
-        a++;
-        if ((a * a + b * b) > (r * r))
-            b--;
+        draw_point_x(x, y, py, px, color);
+        draw_point_x(x, y, px, py, color);
+        py++;
+        if ((py * py + px * px) > (r * r))
+            px--;
     }
 }
