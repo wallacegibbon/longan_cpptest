@@ -11,10 +11,6 @@ void Color16_Screen_SPI::write_bus(uint8_t data)
   while (spi_i2s_flag_get(spi_dev, SPI_FLAG_TBE) == RESET)
     ;
 
-  while (spi_i2s_flag_get(spi_dev, SPI_FLAG_RBNE) == RESET)
-    ;
-  spi_i2s_data_receive(spi_dev);
-
   spi_cs_set();
 }
 

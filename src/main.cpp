@@ -53,7 +53,7 @@ void update_loop_display()
   static unsigned short current_color = 0;
   for (int i = 0; i < 36; i++)
   {
-    current_color += 10;
+    current_color += 100;
     longan_screen.draw_circle(80, 40, i, static_cast<Color16>(current_color));
   }
 }
