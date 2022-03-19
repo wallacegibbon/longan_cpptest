@@ -1,16 +1,19 @@
 #ifndef __Color16_Screen_SPI_H
 #define __Color16_Screen_SPI_H
 
+#include <nuclei_sdk_soc.h>
 #include <stdint.h>
-#include "Color16_Screen.h"
+#include "Screen.h"
+#include "Color_16bit.h"
 
-class Color16_Screen_SPI : public Color16_Screen
+class Screen_16bitColor_SPI : public Screen<Color_16bit>
 {
 public:
-  Color16_Screen_SPI(int dev, int rst_port1, int rst_pin1, int cs_port1, int cs_pin1, int dc_port1, int dc_pin1, int width, int height)
-      : Color16_Screen(width, height),
-        spi_dev(dev), rst_port(rst_port1), rst_pin(rst_pin1),
-        cs_port(cs_port1), cs_pin(cs_pin1), dc_port(dc_port1), dc_pin(dc_pin1) {}
+  Screen_16bitColor_SPI(int dev, int _rst_port, int _rst_pin, int _cs_port, int _cs_pin, int _dc_port, int _dc_pin, int width, int height)
+      : Screen(width, height), spi_dev(dev),
+        rst_port(_rst_port), rst_pin(_rst_pin),
+        cs_port(_cs_port), cs_pin(_cs_pin),
+        dc_port(_dc_port), dc_pin(_dc_pin) {}
 
   void spi_rst_set() { gpio_bit_set(rst_port, rst_pin); }
   void spi_rst_clr() { gpio_bit_reset(rst_port, rst_pin); }
@@ -19,7 +22,7 @@ public:
   void spi_dc_set() { gpio_bit_set(dc_port, dc_pin); }
   void spi_dc_clr() { gpio_bit_reset(dc_port, dc_pin); }
 
-  void write_data(uint16_t data) override;
+  void write_data(uint16_t data);
   void write_data8(uint8_t data);
   void write_reg(uint8_t data);
 

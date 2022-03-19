@@ -1,9 +1,9 @@
 #include <nuclei_sdk_soc.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "Color16_Screen_SPI.h"
+#include "Screen_16bitColor_SPI.h"
 
-void Color16_Screen_SPI::write_bus(uint8_t data)
+void Screen_16bitColor_SPI::write_bus(uint8_t data)
 {
   spi_cs_clr();
 
@@ -14,20 +14,20 @@ void Color16_Screen_SPI::write_bus(uint8_t data)
   spi_cs_set();
 }
 
-void Color16_Screen_SPI::write_data(uint16_t data)
+void Screen_16bitColor_SPI::write_data(uint16_t data)
 {
   spi_dc_set();
   write_bus(data >> 8);
   write_bus(data);
 }
 
-void Color16_Screen_SPI::write_data8(uint8_t data)
+void Screen_16bitColor_SPI::write_data8(uint8_t data)
 {
   spi_dc_set();
   write_bus(data);
 }
 
-void Color16_Screen_SPI::write_reg(uint8_t data)
+void Screen_16bitColor_SPI::write_reg(uint8_t data)
 {
   spi_dc_clr();
   write_bus(data);

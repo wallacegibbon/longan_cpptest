@@ -54,7 +54,7 @@ void update_loop_display()
   for (int i = 0; i < 36; i++)
   {
     current_color += 100;
-    longan_screen.draw_circle(80, 40, i, static_cast<Color16>(current_color));
+    longan_screen.draw_circle(80, 40, i, static_cast<Color_16bit>(current_color));
   }
 }
 
@@ -89,8 +89,8 @@ int main(int argc, const char **argv)
 
   printf("== %s ==\r\n", "the system is ready");
 
-  longan_screen.clear(BLACK);
-  longan_screen.draw_rectangle(10, 10, 150, 70, CYAN);
+  longan_screen.clear(BLACK_16bit);
+  longan_screen.draw_rectangle(10, 10, 150, 70, CYAN_16bit);
 
   circle_display_loop();
 
