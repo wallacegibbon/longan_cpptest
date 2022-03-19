@@ -21,8 +21,8 @@ NUCLEI_SDK_ROOT = ./nuclei-sdk
 BOARD = gd32vf103c_longan_nano
 
 #SRCDIRS = . src
-SRCDIRS = src
-INCDIRS = src
+SRCDIRS = src screen-util
+INCDIRS = . src
 
 include $(NUCLEI_SDK_ROOT)/Build/Makefile.base
 

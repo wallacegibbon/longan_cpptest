@@ -1,5 +1,5 @@
-#ifndef __COLOR16_H
-#define __COLOR16_H
+#ifndef __SCREEN_COLOR_H
+#define __SCREEN_COLOR_H
 
 #include <stdint.h>
 
@@ -30,6 +30,12 @@ enum Color_16bit : uint16_t
   LGRAY_16bit = 0XC618,
   LGRAYBLUE_16bit = 0XA651,
   LBBLUE_16bit = 0X2B12,
+};
+
+enum Color_1bit : uint8_t
+{
+  WHITE_1bit = 1,
+  BLACK_1bit = 0,
 };
 
 #endif

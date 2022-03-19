@@ -1,45 +1,19 @@
-#include <nuclei_sdk_soc.h>
 #include "Screen_ST7735.h"
-
-void spi0_init()
-{
-  spi_parameter_struct spi;
-  spi.trans_mode = SPI_TRANSMODE_FULLDUPLEX;
-  spi.device_mode = SPI_MASTER;
-  spi.frame_size = SPI_FRAMESIZE_8BIT;
-  spi.clock_polarity_phase = SPI_CK_PL_HIGH_PH_2EDGE;
-  spi.nss = SPI_NSS_SOFT;
-  spi.prescale = SPI_PSC_8;
-  spi.endian = SPI_ENDIAN_MSB;
-
-  spi_init(SPI0, &spi);
-  spi_crc_polynomial_set(SPI0, 7);
-  spi_enable(SPI0);
-}
 
 void Screen_ST7735::init()
 {
-  rcu_periph_clock_enable(RCU_GPIOA);
-  rcu_periph_clock_enable(RCU_GPIOB);
-  rcu_periph_clock_enable(RCU_AF);
-  rcu_periph_clock_enable(RCU_SPI0);
+  Screen_16bitColor_SPI::init();
 
-  spi_cs_set();
-
-  /* SPI0 GPIO config: NSS/PA4, SCK/PA5, MOSI/PA7 */
-  gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
-  gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_2);
-
-  spi0_init();
-
-  gpio_init(GPIOB, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_0 | GPIO_PIN_1);
-  gpio_bit_reset(GPIOB, GPIO_PIN_0 | GPIO_PIN_1);
-
-  spi_rst_clr();
+  rst.clr();
   delay_1ms(200);
-  spi_rst_set();
+  rst.set();
   delay_1ms(20);
 
+  send_init_commands();
+}
+
+void Screen_ST7735::send_init_commands()
+{
   // turn off sleep mode
   write_reg(0x11);
   delay_1ms(100);

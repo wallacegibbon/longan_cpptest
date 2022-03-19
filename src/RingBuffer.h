@@ -1,5 +1,5 @@
-#ifndef __RBUFFER_H__
-#define __RBUFFER_H__
+#ifndef __RBUFFER_H
+#define __RBUFFER_H
 
 template <class T, int SIZE>
 class RingBuffer
