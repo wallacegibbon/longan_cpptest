@@ -16,7 +16,7 @@ public:
   void init();
   void write_data(uint16_t data);
   void write_data8(uint8_t data);
-  void write_reg(uint8_t data);
+  void write_cmd(uint8_t data);
 
 protected:
   OutPin rst;

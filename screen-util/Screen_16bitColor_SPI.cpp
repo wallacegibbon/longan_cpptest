@@ -21,7 +21,7 @@ void Screen_16bitColor_SPI::write_data8(uint8_t data)
   dev.write_byte(data);
 }
 
-void Screen_16bitColor_SPI::write_reg(uint8_t data)
+void Screen_16bitColor_SPI::write_cmd(uint8_t data)
 {
   dc.clr();
   dev.write_byte(data);

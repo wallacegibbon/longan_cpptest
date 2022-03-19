@@ -15,14 +15,14 @@ void Screen_ST7735::init()
 void Screen_ST7735::send_init_commands()
 {
   // turn off sleep mode
-  write_reg(0x11);
+  write_cmd(0x11);
   delay_1ms(100);
 
   // display inversion mode
-  write_reg(0x21);
+  write_cmd(0x21);
 
   // Set the frame frequency of the full colors normal mode
-  write_reg(0xB1);
+  write_cmd(0xB1);
 
   // Frame rate=fosc/((RTNA x 2 + 40) x (LINE + FPA + BPA +2))
   // fosc = 850kHz
@@ -31,7 +31,7 @@ void Screen_ST7735::send_init_commands()
   write_data8(0x3A); // BPA
 
   // Set the frame frequency of the Idle mode
-  write_reg(0xB2);
+  write_cmd(0xB2);
 
   // Frame rate=fosc/((RTNB x 2 + 40) x (LINE + FPB + BPB +2))
   // fosc = 850kHz
@@ -40,7 +40,7 @@ void Screen_ST7735::send_init_commands()
   write_data8(0x3A); // BPB
 
   // Set the frame frequency of the Partial mode/ full colors
-  write_reg(0xB3);
+  write_cmd(0xB3);
 
   write_data8(0x05);
   write_data8(0x3A);
@@ -49,33 +49,33 @@ void Screen_ST7735::send_init_commands()
   write_data8(0x3A);
   write_data8(0x3A);
 
-  write_reg(0xB4);
+  write_cmd(0xB4);
   write_data8(0x03);
 
-  write_reg(0xC0);
+  write_cmd(0xC0);
   write_data8(0x62);
   write_data8(0x02);
   write_data8(0x04);
 
-  write_reg(0xC1);
+  write_cmd(0xC1);
   write_data8(0xC0);
 
-  write_reg(0xC2);
+  write_cmd(0xC2);
   write_data8(0x0D);
   write_data8(0x00);
 
-  write_reg(0xC3);
+  write_cmd(0xC3);
   write_data8(0x8D);
   write_data8(0x6A);
 
-  write_reg(0xC4);
+  write_cmd(0xC4);
   write_data8(0x8D);
   write_data8(0xEE);
 
-  write_reg(0xC5);
+  write_cmd(0xC5);
   write_data8(0x0E); // VCOM
 
-  write_reg(0xE0);
+  write_cmd(0xE0);
   write_data8(0x10);
   write_data8(0x0E);
   write_data8(0x02);
@@ -93,7 +93,7 @@ void Screen_ST7735::send_init_commands()
   write_data8(0x0E);
   write_data8(0x10);
 
-  write_reg(0xE1);
+  write_cmd(0xE1);
   write_data8(0x10);
   write_data8(0x0E);
   write_data8(0x03);
@@ -112,30 +112,36 @@ void Screen_ST7735::send_init_commands()
   write_data8(0x10);
 
   // define the format of RGB picture data
-  write_reg(0x3A);
+  write_cmd(0x3A);
 
   write_data8(0x05); // 16-bit/pixel
 
-  write_reg(0x36);
+  write_cmd(0x36);
   write_data8(0x78);
 
-  write_reg(0x29); // Display On
+  write_cmd(0x29); // Display On
 }
 
 void Screen_ST7735::addr_set(int x1, int y1, int x2, int y2)
 {
   // column address settings
-  write_reg(0x2a);
+  write_cmd(0x2a);
   write_data(x1 + 1);
   write_data(x2 + 1);
 
   // row address setting
-  write_reg(0x2b);
+  write_cmd(0x2b);
   write_data(y1 + 26);
   write_data(y2 + 26);
 
   // memory write
-  write_reg(0x2c);
+  write_cmd(0x2c);
+}
+
+void Screen_ST7735::draw_point(int x, int y, Color_16bit color)
+{
+  addr_set(x, y, x, y);
+  write_data(color);
 }
 
 void Screen_ST7735::fill(int x1, int y1, int x2, int y2, Color_16bit color)
@@ -148,10 +154,4 @@ void Screen_ST7735::fill(int x1, int y1, int x2, int y2, Color_16bit color)
       write_data(color);
     }
   }
-}
-
-void Screen_ST7735::draw_point(int x, int y, Color_16bit color)
-{
-  addr_set(x, y, x, y);
-  write_data(color);
 }

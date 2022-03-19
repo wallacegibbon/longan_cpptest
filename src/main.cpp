@@ -3,9 +3,11 @@
 #include <stdint.h>
 #include "RingBuffer.h"
 #include "screen-util/Screen_ST7735.h"
+#include "screen-util/Screen_SSD1306.h"
 #include "screen-util/Common_IO.h"
 
 Screen_ST7735 longan_screen(SPI0, GPIOB, GPIO_PIN_2, GPIOB, GPIO_PIN_1, GPIOB, GPIO_PIN_0, 160, 80);
+Screen_SSD1306 ext_screen_1(I2C0, 0x3c, 128, 64);
 
 RingBuffer<uint8_t, 10> usart0_recv_buffer;
 
@@ -50,6 +52,9 @@ static void clock_init()
   // IO for SPI0: NSS/PA4, SCK/PA5, MOSI/PA7
   gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
 
+  rcu_periph_clock_enable(RCU_I2C0);
+  gpio_init(GPIOB, GPIO_MODE_AF_OD, GPIO_OSPEED_50MHZ, GPIO_PIN_6 | GPIO_PIN_7);
+
   rcu_periph_clock_enable(RCU_USART0);
   // IO for USART0
   gpio_init(GPIOA, GPIO_MODE_AF_PP, GPIO_OSPEED_50MHZ, GPIO_PIN_9);
@@ -59,22 +64,6 @@ static void clock_init()
 static void interrupt_init()
 {
   ECLIC_Register_IRQ(USART0_IRQn, ECLIC_NON_VECTOR_INTERRUPT, ECLIC_LEVEL_TRIGGER, 1, 0, nullptr);
-}
-
-static void spi_init()
-{
-  spi_parameter_struct spi;
-  spi.trans_mode = SPI_TRANSMODE_FULLDUPLEX;
-  spi.device_mode = SPI_MASTER;
-  spi.frame_size = SPI_FRAMESIZE_8BIT;
-  spi.clock_polarity_phase = SPI_CK_PL_HIGH_PH_2EDGE;
-  spi.nss = SPI_NSS_SOFT;
-  spi.prescale = SPI_PSC_8;
-  spi.endian = SPI_ENDIAN_MSB;
-
-  spi_init(SPI0, &spi);
-  spi_crc_polynomial_set(SPI0, 7);
-  spi_enable(SPI0);
 }
 
 static void uart_init()
@@ -101,6 +90,7 @@ static void update_loop_display()
   {
     current_color += 100;
     longan_screen.draw_circle(80, 40, i, static_cast<Color_16bit>(current_color));
+    ext_screen_1.draw_circle(80, 40, i, static_cast<Color_1bit>(current_color & 1));
   }
 }
 
@@ -129,7 +119,6 @@ static void circle_display_loop()
 static void init_system()
 {
   clock_init();
-  spi_init();
   uart_init();
   interrupt_init();
 
@@ -138,6 +127,7 @@ static void init_system()
   blue_LED.init();
 
   longan_screen.init();
+  ext_screen_1.init();
 
   __enable_irq();
 }
