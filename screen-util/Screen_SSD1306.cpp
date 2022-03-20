@@ -15,6 +15,10 @@ void Screen_SSD1306::send_init_commands()
     write_cmd(0xDA, 0x02);
   }
 
+  /* normal direction, can be changed by method `up_down_invert` */
+  write_cmd(0xA0);
+  write_cmd(0xC0);
+
   /* vertical shift, 0 ~ 63 */
   // write_cmd(0xD3, 20);
 
@@ -22,7 +26,6 @@ void Screen_SSD1306::send_init_commands()
   // write_cmd(0xD5, 0xF0);
 
   // write_cmd(0xD9, 0x22);
-
 }
 
 void Screen_SSD1306::set_brightness(uint8_t value)
@@ -32,7 +35,17 @@ void Screen_SSD1306::set_brightness(uint8_t value)
 
 void Screen_SSD1306::up_down_invert()
 {
-  write_cmd(0xA1);
+  if (direction == 0)
+  {
+    write_cmd(0xA1);
+    write_cmd(0xC8);
+  }
+  else
+  {
+    write_cmd(0xA0);
+    write_cmd(0xC0);
+  }
+  direction = !direction;
 }
 
 void Screen_SSD1306::color_reverse()

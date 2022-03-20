@@ -142,10 +142,11 @@ int main(int argc, const char **argv)
   longan_screen.draw_rectangle(80 - 50, 40 - 20, 80 + 50, 40 + 20, CYAN_16bit);
   longan_screen.draw_circle(80 - 50, 40 - 20, 5, YELLOW_16bit);
 
+  // ext_screen_1.set_brightness(0x01);
+  // ext_screen_1.color_reverse();
+  // ext_screen_1.up_down_invert();
   ext_screen_1.clear(BLACK_1bit);
   ext_screen_1.draw_rectangle(64 - 50, 32 - 20, 64 + 50, 32 + 20, WHITE_1bit);
-  // ext_screen_1.color_reverse();
-  // ext_screen_1.set_brightness(0x01);
   ext_screen_1.draw_circle(64 - 50, 32 - 20, 5, WHITE_1bit);
 
   circle_display_loop();
