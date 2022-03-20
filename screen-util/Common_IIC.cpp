@@ -4,7 +4,8 @@
 
 void IIC_Dev::init()
 {
-  i2c_clock_config(dev, 100000, I2C_DTCY_2);
+  // i2c_clock_config(dev, 100000, I2C_DTCY_2);
+  i2c_clock_config(dev, 400000, I2C_DTCY_2);
   i2c_mode_addr_config(dev, I2C_I2CMODE_ENABLE, I2C_ADDFORMAT_7BITS, addr);
   i2c_enable(dev);
   i2c_ack_config(dev, I2C_ACK_ENABLE);

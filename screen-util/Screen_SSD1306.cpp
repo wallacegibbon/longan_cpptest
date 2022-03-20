@@ -3,38 +3,41 @@
 void Screen_SSD1306::init()
 {
   dev.init();
-
-  write_cmd(0x40);
-  write_cmd(0xb0);
-
-  write_cmd(0xc8);
-
-  write_cmd(0x81);
-  write_cmd(0xff);
-
-  write_cmd(0xa1);
-
-  write_cmd(0xa6);
-
-  write_cmd(0xa8);
-  write_cmd(0x1f);
-
-  write_cmd(0xd3);
-  write_cmd(0x00);
-
-  write_cmd(0xd5);
-  write_cmd(0xf0);
-
-  write_cmd(0xd9);
-  write_cmd(0x22);
-
-  write_cmd(0xda);
-  write_cmd(0x02);
-
-  write_cmd(0xdb);
-  write_cmd(0x49);
-
+  send_init_commands();
   display_on();
+}
+
+void Screen_SSD1306::send_init_commands()
+{
+  if (height == 32)
+  {
+    write_cmd(0xA8, 0x1F);
+    write_cmd(0xDA, 0x02);
+  }
+
+  /* vertical shift, 0 ~ 63 */
+  // write_cmd(0xD3, 20);
+
+  /* Ratio/Oscillator & Clock Divide */
+  // write_cmd(0xD5, 0xF0);
+
+  // write_cmd(0xD9, 0x22);
+
+}
+
+void Screen_SSD1306::set_brightness(uint8_t value)
+{
+  write_cmd(0x81, value);
+}
+
+void Screen_SSD1306::up_down_invert()
+{
+  write_cmd(0xA1);
+}
+
+void Screen_SSD1306::color_reverse()
+{
+  write_cmd(0xA7);
 }
 
 void Screen_SSD1306::write_data(uint8_t data)
@@ -45,49 +48,73 @@ void Screen_SSD1306::write_data(uint8_t data)
   dev.stop_transmit();
 }
 
-void Screen_SSD1306::write_cmd(uint8_t data)
+void Screen_SSD1306::write_cmd(uint8_t cmd)
 {
   dev.start_transmit();
   dev.write_byte(0x00);
-  dev.write_byte(data);
+  dev.write_byte(cmd);
+  dev.stop_transmit();
+}
+
+void Screen_SSD1306::write_cmd(uint8_t cmd, uint8_t param)
+{
+  dev.start_transmit();
+  dev.write_byte(0x00);
+  dev.write_byte(cmd);
+  dev.write_byte(param);
   dev.stop_transmit();
 }
 
 void Screen_SSD1306::display_on()
 {
-  write_cmd(0x8d);
-  write_cmd(0x14);
-  write_cmd(0xaf);
+  // turn on the charge pump
+  write_cmd(0x8D, 0x14);
+  // turn on display
+  write_cmd(0xAF);
 }
 
 void Screen_SSD1306::display_off()
 {
-  write_cmd(0x8d);
-  write_cmd(0x10);
-  write_cmd(0xae);
+  // turn off the charge pump
+  write_cmd(0x8D, 0x10);
+  // turn off display
+  write_cmd(0xAE);
 }
 
-void Screen_SSD1306::addr_set(int x1, int y1, int x2, int y2)
+void Screen_SSD1306::flush()
 {
-  write_cmd(0xb0 + y1);
-  write_cmd((x1 & 0xf) >> 4 | 0x10);
-  write_cmd(x1 & 0xf);
+  dev.start_transmit();
+  // to implement
+  dev.stop_transmit();
 }
 
 void Screen_SSD1306::draw_point(int x, int y, Color_1bit color)
 {
-  addr_set(x, y, x, y);
-  write_data(color);
-}
-
-void Screen_SSD1306::fill(int x1, int y1, int x2, int y2, Color_1bit color)
-{
-  addr_set(x1, y1, x2, y2);
-  for (int i = y1; i <= y2; i++)
+  if (x >= width || y >= height)
   {
-    for (int j = x1; j <= x2; j++)
-    {
-      write_data(color);
-    }
+    return;
   }
+  int page_idx = y / 8;
+  int byte_idx = y % 8;
+
+  int tmp = buf[x][page_idx];
+  tmp &= ~(1 << byte_idx);
+  tmp |= color << byte_idx;
+  buf[x][page_idx] = tmp;
+
+  /*
+  dev.start_transmit();
+  dev.write_byte(0x00);
+  dev.write_byte(0xB0 + page_idx);
+  dev.write_byte(((x >> 4) & 0x0F) | 0x10);
+  dev.write_byte(x & 0x0F);
+  dev.write_byte(0x40);
+  dev.write_byte(tmp);
+  dev.stop_transmit();
+  */
+
+  write_cmd(0xB0 + page_idx);
+  write_cmd(((x >> 4) & 0x0F) | 0x10);
+  write_cmd(x & 0x0F);
+  write_data(tmp);
 }

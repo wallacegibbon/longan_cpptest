@@ -18,12 +18,11 @@ void Screen_ST7735::send_init_commands()
   write_cmd(0x11);
   delay_1ms(100);
 
-  // display inversion mode
+  // display inversion mode (0 is black, -1 is white)
   write_cmd(0x21);
 
   // Set the frame frequency of the full colors normal mode
   write_cmd(0xB1);
-
   // Frame rate=fosc/((RTNA x 2 + 40) x (LINE + FPA + BPA +2))
   // fosc = 850kHz
   write_data8(0x05); // RTNA
@@ -32,7 +31,6 @@ void Screen_ST7735::send_init_commands()
 
   // Set the frame frequency of the Idle mode
   write_cmd(0xB2);
-
   // Frame rate=fosc/((RTNB x 2 + 40) x (LINE + FPB + BPB +2))
   // fosc = 850kHz
   write_data8(0x05); // RTNB
@@ -41,7 +39,6 @@ void Screen_ST7735::send_init_commands()
 
   // Set the frame frequency of the Partial mode/ full colors
   write_cmd(0xB3);
-
   write_data8(0x05);
   write_data8(0x3A);
   write_data8(0x3A);
@@ -111,10 +108,9 @@ void Screen_ST7735::send_init_commands()
   write_data8(0x0E);
   write_data8(0x10);
 
-  // define the format of RGB picture data
+  // 16 bit color
   write_cmd(0x3A);
-
-  write_data8(0x05); // 16-bit/pixel
+  write_data8(0x05);
 
   write_cmd(0x36);
   write_data8(0x78);
@@ -125,21 +121,25 @@ void Screen_ST7735::send_init_commands()
 void Screen_ST7735::addr_set(int x1, int y1, int x2, int y2)
 {
   // column address settings
-  write_cmd(0x2a);
+  write_cmd(0x2A);
   write_data(x1 + 1);
   write_data(x2 + 1);
 
   // row address setting
-  write_cmd(0x2b);
+  write_cmd(0x2B);
   write_data(y1 + 26);
   write_data(y2 + 26);
 
   // memory write
-  write_cmd(0x2c);
+  write_cmd(0x2C);
 }
 
 void Screen_ST7735::draw_point(int x, int y, Color_16bit color)
 {
+  if (x > width || y > height)
+  {
+    return;
+  }
   addr_set(x, y, x, y);
   write_data(color);
 }

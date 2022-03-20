@@ -14,11 +14,12 @@ public:
       : Screen(width, height), dev(_dev, cs_port, cs_pin), rst(rst_port, rst_pin), dc(dc_port, dc_pin) {}
 
   void init();
+
+protected:
   void write_data(uint16_t data);
   void write_data8(uint8_t data);
   void write_cmd(uint8_t data);
 
-protected:
   OutPin rst;
 
 private:

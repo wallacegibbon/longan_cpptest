@@ -24,7 +24,7 @@ public:
   void draw_point_x(int x, int y, int a, int b, ColorType color);
   void draw_circle(int x, int y, int r, ColorType color);
 
-private:
+protected:
   int width;
   int height;
 };
@@ -44,13 +44,13 @@ void Screen<ColorType>::fill(int x1, int y1, int x2, int y2, ColorType color)
 template <class ColorType>
 void Screen<ColorType>::clear(ColorType color)
 {
-  fill(0, 0, width - 1, height - 1, color);
+  fill(0, 0, width, height, color);
 }
 
 template <class ColorType>
 void Screen<ColorType>::draw_point_big(int x, int y, ColorType color)
 {
-  fill(x - 1, y - 1, x + 1, y + 1, color);
+  fill(x - 1, y - 1, x + 2, y + 2, color);
 }
 
 template <class T>

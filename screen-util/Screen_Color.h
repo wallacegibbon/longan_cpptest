@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 
-// 5 bit for one color, R + G + B = 15bits, which can be filled into a `short int`
-
+// R:G:B == 5:6:5
 enum Color_16bit : uint16_t
 {
   WHITE_16bit = 0xFFFF,

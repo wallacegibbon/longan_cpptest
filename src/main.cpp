@@ -7,7 +7,8 @@
 #include "screen-util/Common_IO.h"
 
 Screen_ST7735 longan_screen(SPI0, GPIOB, GPIO_PIN_2, GPIOB, GPIO_PIN_1, GPIOB, GPIO_PIN_0, 160, 80);
-Screen_SSD1306 ext_screen_1(I2C0, 0x3c, 128, 64);
+Screen_SSD1306 ext_screen_1(I2C0, 0x3C, 128, 64);
+// Screen_SSD1306 ext_screen_1(I2C0, 0x3C, 128, 32);
 
 RingBuffer<uint8_t, 10> usart0_recv_buffer;
 
@@ -86,11 +87,11 @@ static void uart_init()
 static void update_loop_display()
 {
   static unsigned short current_color = 0;
-  for (int i = 0; i < 36; i++)
+  for (int i = 0; i < 30; i++)
   {
-    current_color += 100;
+    current_color += 20;
     longan_screen.draw_circle(80, 40, i, static_cast<Color_16bit>(current_color));
-    ext_screen_1.draw_circle(80, 40, i, static_cast<Color_1bit>(current_color & 1));
+    ext_screen_1.draw_circle(64, 32, i, static_cast<Color_1bit>(1));
   }
 }
 
@@ -138,7 +139,14 @@ int main(int argc, const char **argv)
   printf("== %s ==\r\n", "the system is ready");
 
   longan_screen.clear(BLACK_16bit);
-  longan_screen.draw_rectangle(10, 10, 150, 70, CYAN_16bit);
+  longan_screen.draw_rectangle(80 - 50, 40 - 20, 80 + 50, 40 + 20, CYAN_16bit);
+  longan_screen.draw_circle(80 - 50, 40 - 20, 5, YELLOW_16bit);
+
+  ext_screen_1.clear(BLACK_1bit);
+  ext_screen_1.draw_rectangle(64 - 50, 32 - 20, 64 + 50, 32 + 20, WHITE_1bit);
+  // ext_screen_1.color_reverse();
+  // ext_screen_1.set_brightness(0x01);
+  ext_screen_1.draw_circle(64 - 50, 32 - 20, 5, WHITE_1bit);
 
   circle_display_loop();
 
