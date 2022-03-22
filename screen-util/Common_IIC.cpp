@@ -15,28 +15,28 @@ void IIC_Dev::start_transmit()
 {
   /* wait until I2C bus is idle */
   while (i2c_flag_get(dev, I2C_FLAG_I2CBSY))
-    ;
+    continue;
 
   /* send a start condition to I2C bus */
   i2c_start_on_bus(dev);
 
   /* wait until SBSEND bit is set */
   while (!i2c_flag_get(dev, I2C_FLAG_SBSEND))
-    ;
+    continue;
 
   /* send slave address to I2C bus */
   i2c_master_addressing(dev, addr, I2C_TRANSMITTER);
 
   /* wait until ADDSEND bit is set */
   while (!i2c_flag_get(dev, I2C_FLAG_ADDSEND))
-    ;
+    continue;
 
   /* clear ADDSEND bit */
   i2c_flag_clear(dev, I2C_FLAG_ADDSEND);
 
   /* wait until the transmit data buffer is empty */
   while (!i2c_flag_get(dev, I2C_FLAG_TBE))
-    ;
+    continue;
 }
 
 void IIC_Dev::stop_transmit()
@@ -46,12 +46,12 @@ void IIC_Dev::stop_transmit()
 
   /* wait until stop condition generate */
   while (I2C_CTL0(dev) & 0x0200)
-    ;
+    continue;
 }
 
 void IIC_Dev::write_byte(uint8_t data)
 {
   i2c_data_transmit(dev, data);
   while (!i2c_flag_get(dev, I2C_FLAG_TBE))
-    ;
+    continue;
 }

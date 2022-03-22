@@ -1,7 +1,7 @@
 #ifndef __RBUFFER_H
 #define __RBUFFER_H
 
-template <class T, int SIZE>
+template <typename T, int SIZE>
 class RingBuffer
 {
 public:
@@ -17,7 +17,7 @@ private:
   int out;
 };
 
-template <class T, int SIZE>
+template <typename T, int SIZE>
 int RingBuffer<T, SIZE>::count()
 {
   if (in >= out)
@@ -30,13 +30,13 @@ int RingBuffer<T, SIZE>::count()
   }
 }
 
-template <class T, int SIZE>
+template <typename T, int SIZE>
 int RingBuffer<T, SIZE>::rest()
 {
   return SIZE - 1 - count();
 }
 
-template <class T, int SIZE>
+template <typename T, int SIZE>
 int RingBuffer<T, SIZE>::put(T *data, int cnt)
 {
   if (rest() < cnt)
@@ -63,7 +63,7 @@ int RingBuffer<T, SIZE>::put(T *data, int cnt)
   return cnt;
 }
 
-template <class T, int SIZE>
+template <typename T, int SIZE>
 int RingBuffer<T, SIZE>::get(T *data, int cnt)
 {
   if (count() < cnt)

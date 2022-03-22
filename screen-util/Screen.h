@@ -1,7 +1,7 @@
 #ifndef __SCREEN_H
 #define __SCREEN_H
 
-template <class ColorType>
+template <typename ColorType>
 class Screen
 {
 public:
@@ -29,7 +29,7 @@ protected:
   int height;
 };
 
-template <class ColorType>
+template <typename ColorType>
 void Screen<ColorType>::fill(int x1, int y1, int x2, int y2, ColorType color)
 {
   for (int i = x1; i < x2; i++)
@@ -41,37 +41,37 @@ void Screen<ColorType>::fill(int x1, int y1, int x2, int y2, ColorType color)
   }
 }
 
-template <class ColorType>
+template <typename ColorType>
 void Screen<ColorType>::clear(ColorType color)
 {
   fill(0, 0, width, height, color);
 }
 
-template <class ColorType>
+template <typename ColorType>
 void Screen<ColorType>::draw_point_big(int x, int y, ColorType color)
 {
   fill(x - 1, y - 1, x + 2, y + 2, color);
 }
 
-template <class T>
+template <typename T>
 static inline T abs(T v)
 {
   return v < 0 ? -v : v;
 }
 
-template <class T>
+template <typename T>
 static inline T max(T a, T b)
 {
   return a > b ? a : b;
 }
 
-template <class T>
+template <typename T>
 static inline T unit_value(T v)
 {
   return v < 0 ? -1 : 1;
 }
 
-template <class ColorType>
+template <typename ColorType>
 class LinePainter
 {
 public:
@@ -104,7 +104,7 @@ private:
   ColorType color;
 };
 
-template <class ColorType>
+template <typename ColorType>
 void LinePainter<ColorType>::draw_step()
 {
   screen.draw_point(x, y, color);
@@ -122,7 +122,7 @@ void LinePainter<ColorType>::draw_step()
   }
 }
 
-template <class ColorType>
+template <typename ColorType>
 void LinePainter<ColorType>::draw_line()
 {
   for (int i = 0; i <= distance; i++)
@@ -131,14 +131,14 @@ void LinePainter<ColorType>::draw_line()
   }
 }
 
-template <class ColorType>
+template <typename ColorType>
 void Screen<ColorType>::draw_line(int x1, int y1, int x2, int y2, ColorType color)
 {
   LinePainter<ColorType> p(*this, x1, y1, x2, y2, color);
   p.draw_line();
 }
 
-template <class ColorType>
+template <typename ColorType>
 void Screen<ColorType>::draw_rectangle(int x1, int y1, int x2, int y2, ColorType color)
 {
   draw_line(x1, y1, x2, y1, color);
@@ -148,7 +148,7 @@ void Screen<ColorType>::draw_rectangle(int x1, int y1, int x2, int y2, ColorType
   draw_line(x2, y1, x2, y2, color);
 }
 
-template <class ColorType>
+template <typename ColorType>
 void Screen<ColorType>::draw_point_x(int x, int y, int a, int b, ColorType color)
 {
   draw_point(x - a, y + b, color);
@@ -158,17 +158,18 @@ void Screen<ColorType>::draw_point_x(int x, int y, int a, int b, ColorType color
   draw_point(x + a, y + b, color);
 }
 
-template <class ColorType>
+template <typename ColorType>
 void Screen<ColorType>::draw_circle(int x, int y, int r, ColorType color)
 {
   int px = r;
   int py = 0;
+  int r_square = r * r;
   while (py <= px)
   {
     draw_point_x(x, y, py, px, color);
     draw_point_x(x, y, px, py, color);
     py++;
-    if ((py * py + px * px) > (r * r))
+    if ((py * py + px * px) > r_square)
     {
       px--;
     }

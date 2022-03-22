@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "Common_SPI.h"
 
-void SPI_Dev::init()
+void SPI_NSS_Soft_Dev::init()
 {
   spi_parameter_struct spi;
   spi.trans_mode = SPI_TRANSMODE_FULLDUPLEX;
@@ -20,13 +20,13 @@ void SPI_Dev::init()
   cs.init();
 }
 
-void SPI_Dev::write_byte(uint8_t data)
+void SPI_NSS_Soft_Dev::write_byte(uint8_t data)
 {
   cs.clr();
 
   spi_i2s_data_transmit(dev, data);
   while (spi_i2s_flag_get(dev, SPI_FLAG_TBE) == RESET)
-    ;
+    continue;
 
   cs.set();
 }

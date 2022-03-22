@@ -5,10 +5,10 @@
 #include <stdint.h>
 #include "Common_IO.h"
 
-class SPI_Dev
+class SPI_NSS_Soft_Dev
 {
 public:
-  SPI_Dev(int _dev, int cs_port, int cs_pin) : dev(_dev), cs(cs_port, cs_pin) {}
+  SPI_NSS_Soft_Dev(int _dev, int cs_port, int cs_pin) : dev(_dev), cs(cs_port, cs_pin) {}
 
   void init();
   void write_byte(uint8_t data);

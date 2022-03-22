@@ -23,7 +23,7 @@ protected:
   OutPin rst;
 
 private:
-  SPI_Dev dev;
+  SPI_NSS_Soft_Dev dev;
   OutPin dc;
 };
 

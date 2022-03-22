@@ -165,7 +165,7 @@ extern "C"
   {
     usart_data_transmit(USART0, static_cast<uint8_t>(ch));
     while (usart_flag_get(USART0, USART_FLAG_TBE) == RESET)
-      ;
+      continue;
     return ch;
   }
 
