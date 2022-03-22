@@ -14,7 +14,7 @@ class Screen_SSD1306 : public Screen<Color_1bit>
 {
 public:
   Screen_SSD1306(int _dev, int addr, int width, int height)
-      : dev(_dev, addr), Screen(width, height), direction(0) {}
+      : Screen(width, height), dev(_dev, addr) {}
 
   void init();
   void display_on();
@@ -35,7 +35,7 @@ private:
 
   uint8_t buf[128][8];
   IIC_Dev dev;
-  int direction;
+  int direction = 0;
 };
 
 #endif

@@ -17,13 +17,13 @@ OutPin red_LED(GPIOC, GPIO_PIN_13);
 class LED_Controller
 {
 public:
-  LED_Controller(int init_port, int init_pin) : dev(init_port, init_pin), state(true) {}
+  LED_Controller(int init_port, int init_pin) : dev(init_port, init_pin) {}
   void init() { dev.init(); }
   void toggle();
 
 private:
   OutPin dev;
-  bool state;
+  bool state = true;
 };
 
 void LED_Controller::toggle()

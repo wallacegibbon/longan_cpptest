@@ -76,8 +76,7 @@ class LinePainter
 {
 public:
   LinePainter(Screen<ColorType> &target_screen, int x1, int y1, int x2, int y2, ColorType color1)
-      : screen(target_screen), x(x1), y(y1), acc_x(0), acc_y(0),
-        delta_x(x2 - x1), delta_y(y2 - y1), color(color1)
+      : screen(target_screen), x(x1), y(y1), delta_x(x2 - x1), delta_y(y2 - y1), color(color1)
   {
     step_x = unit_value(delta_x);
     step_y = unit_value(delta_y);
@@ -99,8 +98,8 @@ private:
   int step_y;
   int x;
   int y;
-  int acc_x;
-  int acc_y;
+  int acc_x = 0;
+  int acc_y = 0;
   ColorType color;
 };
 
