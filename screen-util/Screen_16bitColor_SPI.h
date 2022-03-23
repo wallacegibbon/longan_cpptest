@@ -10,21 +10,21 @@
 class Screen_16bitColor_SPI : public Screen<Color_16bit>
 {
 public:
-  Screen_16bitColor_SPI(int _dev, int cs_port, int cs_pin, int rst_port, int rst_pin, int dc_port, int dc_pin, int width, int height)
-      : Screen(width, height), dev(_dev, cs_port, cs_pin), rst(rst_port, rst_pin), dc(dc_port, dc_pin) {}
+    Screen_16bitColor_SPI(int _dev, int cs_port, int cs_pin, int rst_port, int rst_pin, int dc_port, int dc_pin, int width, int height)
+        : Screen(width, height), dev(_dev, cs_port, cs_pin), rst(rst_port, rst_pin), dc(dc_port, dc_pin) {}
 
-  void init();
+    void init();
 
 protected:
-  void write_data(uint16_t data);
-  void write_data8(uint8_t data);
-  void write_cmd(uint8_t data);
+    void write_data(uint16_t data);
+    void write_data8(uint8_t data);
+    void write_cmd(uint8_t data);
 
-  OutPin rst;
+    OutPin rst;
 
 private:
-  SPI_NSS_Soft_Dev dev;
-  OutPin dc;
+    SPI_NSS_Soft_Dev dev;
+    OutPin dc;
 };
 
 #endif

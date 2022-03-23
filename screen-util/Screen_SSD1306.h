@@ -13,29 +13,29 @@
 class Screen_SSD1306 : public Screen<Color_1bit>
 {
 public:
-  Screen_SSD1306(int _dev, int addr, int width, int height)
-      : Screen(width, height), dev(_dev, addr) {}
+    Screen_SSD1306(int _dev, int addr, int width, int height)
+        : Screen(width, height), dev(_dev, addr) {}
 
-  void init();
-  void display_on();
-  void display_off();
+    void init();
+    void display_on();
+    void display_off();
 
-  void set_brightness(uint8_t value);
-  void up_down_invert();
-  void color_reverse();
+    void set_brightness(uint8_t value);
+    void up_down_invert();
+    void color_reverse();
 
-  void draw_point(int x, int y, Color_1bit color) override;
+    void draw_point(int x, int y, Color_1bit color) override;
 
 private:
-  void send_init_commands();
-  void write_data(uint8_t data);
-  void write_cmd(uint8_t cmd);
-  void write_cmd(uint8_t cmd, uint8_t param);
-  void flush();
+    void send_init_commands();
+    void write_data(uint8_t data);
+    void write_cmd(uint8_t cmd);
+    void write_cmd(uint8_t cmd, uint8_t param);
+    void flush();
 
-  uint8_t buf[128][8];
-  IIC_Dev dev;
-  int direction = 0;
+    uint8_t buf[128][8];
+    IIC_Dev dev;
+    int direction = 0;
 };
 
 #endif
