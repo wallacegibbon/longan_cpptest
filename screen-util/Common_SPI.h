@@ -1,8 +1,8 @@
 #ifndef __COMMON_SPI_H
 #define __COMMON_SPI_H
 
-#include <nuclei_sdk_soc.h>
 #include <stdint.h>
+#include "nuclei_sdk_soc.h"
 #include "Common_IO.h"
 
 class SPI_NSS_Soft_Dev

@@ -1,5 +1,5 @@
-#include <nuclei_sdk_soc.h>
 #include <stdint.h>
+#include "nuclei_sdk_soc.h"
 #include "Common_IIC.h"
 
 void IIC_Dev::init()

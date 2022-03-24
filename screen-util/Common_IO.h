@@ -1,7 +1,7 @@
 #ifndef __COMMON_IO_H
 #define __COMMON_IO_H
 
-#include <nuclei_sdk_soc.h>
+#include "nuclei_sdk_soc.h"
 
 class OutPin
 {

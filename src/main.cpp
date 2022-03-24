@@ -1,6 +1,6 @@
-#include <nuclei_sdk_soc.h>
 #include <stdio.h>
 #include <stdint.h>
+#include "nuclei_sdk_soc.h"
 #include "RingBuffer.h"
 #include "screen-util/Screen_ST7735.h"
 #include "screen-util/Screen_SSD1306.h"

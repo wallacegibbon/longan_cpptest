@@ -2,8 +2,7 @@ NUCLEI_RISCV_GCC_ROOT := /usr/local/nuclei-riscv-tools/gcc
 NUCLEI_OPENOCD_ROOT := /usr/local/riscv-openocd
 
 OPENOCD_CMD := $(NUCLEI_OPENOCD_ROOT)/bin/openocd
-MY_OPENOCD_ARGS := -f interface/ftdi/sipeed-rv-debugger.cfg \
-	-f target/gd32vf103.cfg
+MY_OPENOCD_ARGS := -f interface/ftdi/sipeed-rv-debugger.cfg -f target/gd32vf103.cfg
 
 RISCV_ARCH = rv32imac
 RISCV_ABI = ilp32
@@ -26,19 +25,11 @@ INCDIRS = . src
 
 include $(NUCLEI_SDK_ROOT)/Build/Makefile.base
 
-.PHONY: tags load start_openocd
-
-tags:
-	@echo "\tGenerating ctag file..."
-	@find . -regex '.*\.[ch]' -exec realpath {} \; \
-		| sort | uniq | xargs ctags
+.PHONY: load run_openocd
 
 load:
-	@echo "\tLoad program to the target machine..."
-	@$(OPENOCD_CMD) $(MY_OPENOCD_ARGS) -d1 \
-		-c "program $(TARGET).elf verify reset exit"
+	$(OPENOCD_CMD) $(MY_OPENOCD_ARGS) -d1 -c "program $(TARGET).elf verify reset exit"
 
 run_openocd:
-	@echo "\tStarting the OpenOCD server..."
-	@$(OPENOCD_CMD) $(MY_OPENOCD_ARGS)
+	$(OPENOCD_CMD) $(MY_OPENOCD_ARGS)
 

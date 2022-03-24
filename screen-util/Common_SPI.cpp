@@ -1,5 +1,5 @@
-#include <nuclei_sdk_soc.h>
 #include <stdint.h>
+#include "nuclei_sdk_soc.h"
 #include "Common_SPI.h"
 
 void SPI_NSS_Soft_Dev::init()

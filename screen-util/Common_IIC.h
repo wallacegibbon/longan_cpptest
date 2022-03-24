@@ -1,8 +1,8 @@
 #ifndef __COMMON_IIC_H
 #define __COMMON_IIC_H
 
-#include <nuclei_sdk_soc.h>
 #include <stdint.h>
+#include "nuclei_sdk_soc.h"
 
 class IIC_Dev
 {
