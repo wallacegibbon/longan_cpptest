@@ -7,8 +7,8 @@
 #include "screen-util/Common_IO.h"
 
 Screen_ST7735 longan_screen(SPI0, GPIOB, GPIO_PIN_2, GPIOB, GPIO_PIN_1, GPIOB, GPIO_PIN_0, 160, 80);
-Screen_SSD1306 ext_screen_1(I2C0, 0x3C, 128, 64);
-// Screen_SSD1306 ext_screen_1(I2C0, 0x3C, 128, 32);
+Screen_SSD1306_IIC ext_screen_1(I2C0, 0x3C, 128, 64);
+// Screen_SSD1306_IIC ext_screen_1(I2C0, 0x3C, 128, 32);
 
 RingBuffer<uint8_t, 10> usart0_recv_buffer;
 
