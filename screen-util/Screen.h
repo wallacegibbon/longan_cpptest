@@ -10,11 +10,9 @@ public:
     // the basic drawing functions
     virtual void draw_point(int x, int y, ColorType color) {}
 
-    // the default `fill` is based on `draw_point`, which may be inefficient,
-    // override this method when there are more efficient way.
+    // the default `fill` is based on `draw_point`, which may be inefficient.
+    // Override this method when there are more efficient way.
     virtual void fill(int x1, int y1, int x2, int y2, ColorType color);
-
-    void clear(ColorType color);
 
     void draw_point_big(int x, int y, ColorType color);
     void draw_line(int x1, int y1, int x2, int y2, ColorType color);
@@ -23,6 +21,8 @@ public:
     // helper for drawing circle
     void draw_point_x(int x, int y, int a, int b, ColorType color);
     void draw_circle(int x, int y, int r, ColorType color);
+
+    void clear(ColorType color);
 
 protected:
     int width;

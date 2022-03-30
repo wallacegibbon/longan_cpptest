@@ -26,11 +26,12 @@ public:
 
 protected:
     void send_init_commands();
+
+private:
     virtual void write_data(uint8_t data) {}
     virtual void write_cmd(uint8_t cmd) {}
     virtual void write_cmd(uint8_t cmd, uint8_t param) {}
 
-private:
     uint8_t buf[128][8];
     int direction = 0;
 };
